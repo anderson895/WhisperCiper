@@ -6,7 +6,8 @@
   <title>Whisper Cipher - Signup</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 </head>
 <body class="bg-gray-200 min-h-screen flex items-center justify-center">
   <div class="flex flex-col md:flex-row w-11/12 max-w-4xl shadow-lg rounded-lg overflow-hidden">
@@ -64,6 +65,7 @@
           <a href="/" class="text-sm text-purple-500 hover:underline">Already have an account?</a>
         </div>
       </form>
+      <div id="registration-message" class="mt-4 text-center"></div>
     </div>
 
     <!-- Right Section -->
@@ -77,27 +79,49 @@
     </div>
   </div>
 
-
-
   <script>
-    $(document).ready(function () {
-      $("#registration-form").submit(function (e) {
-        e.preventDefault();
-        const data = $(this).serialize();
+   $(document).ready(function () {
+    $("#registration-form").submit(function (e) {
+        e.preventDefault(); // Prevent form from submitting traditionally
+
+        // Validate checkbox
+        if (!$("#confirm").is(":checked")) {
+            $("#registration-message").html(`<div class="text-red-700">You must certify that the information is correct.</div>`);
+            return;
+        }
+
+        const data = {
+            username: $("#username").val(),
+            password: $("#password").val(),
+            verify_password: $("#verify-password").val(),
+        };
+
+        // Basic field validation
+        if (!data.username || !data.password || !data.verify_password) {
+            $("#registration-message").html(`<div class="text-red-700">All fields are required.</div>`);
+            return;
+        }
+
         $.ajax({
-          type: "POST",
-          url: "/registration",
-          data: data,
-          success: function (response) {
-            $("#registration-message").html(`<div class="text-green-700">${response.message}</div>`);
-            $("#registration-form")[0].reset();
-          },
-          error: function (xhr) {
-            $("#registration-message").html(`<div class="text-red-700">${xhr.responseJSON.message}</div>`);
-          },
+            type: "POST",
+            url: "/registration",
+            data: data,
+            success: function (response) {
+                alertify.success(response.message);
+                setTimeout(function () {
+                    window.location.href = '/login'; // Redirect to login page after 1 second
+                }, 1000); // 1-second delay
+            },
+            error: function (xhr) {
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    $("#registration-message").html(`<div class="text-red-700">${xhr.responseJSON.message}</div>`);
+                } else {
+                    $("#registration-message").html(`<div class="text-red-700">An error occurred.</div>`);
+                }
+            },
         });
-      });
     });
+  });
   </script>
 </body>
 </html>

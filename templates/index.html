@@ -6,8 +6,8 @@
     <title>Whisper Cipher</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    
+    <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
 </head>
 <body class="bg-gray-200 min-h-screen flex items-center justify-center">
 
@@ -19,12 +19,15 @@
                 <h1 class="text-2xl font-bold text-gray-800">Whisper Cipher</h1>
             </div>
             <p class="text-gray-500 mb-6">Tell us your secret...</p>
+            
+            
             <form id="login-form" class="w-full max-w-sm">
                 <div class="mb-4">
                     <label for="username" class="block text-gray-700">Username</label>
                     <input
                         type="text"
                         id="username"
+                        name="username"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
                         placeholder="Enter your username">
                 </div>
@@ -33,6 +36,7 @@
                     <input
                         type="password"
                         id="password"
+                        name="password"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
                         placeholder="Enter your password">
                 </div>
@@ -42,6 +46,7 @@
                     Login
                 </button>
             </form>
+            
             <p class="text-center text-gray-500 mt-4">
                 <a href="/registration" class="text-purple-600 hover:underline">Create new account?</a>
             </p>
@@ -58,25 +63,36 @@
         </div>
     </div>
 
-
     <script>
         $(document).ready(function () {
-          $("#login-form").submit(function (e) {
-            e.preventDefault();
-            const data = $(this).serialize();
-            $.ajax({
-              type: "POST",
-              url: "/login",
-              data: data,
-              success: function (response) {
-                $("#login-message").html(`<div class="text-green-700">${response.message}</div>`);
-              },
-              error: function (xhr) {
-                $("#login-message").html(`<div class="text-red-700">${xhr.responseJSON.message}</div>`);
-              },
-            });
-          });
+    $("#login-form").submit(function (e) {
+        e.preventDefault();
+        
+        const data = $(this).serialize();
+        console.log("Login Data Sent:", data); // Log the serialized data
+        
+        if (!data) {
+            console.log("Form data is empty");
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/login",
+            data: data,
+            success: function (response) {
+                alertify.success(response.message);
+                setTimeout(function () {
+                    window.location.href = "/dashboard"; 
+                }, 1000);
+            },
+            error: function (xhr) {
+                alertify.error(xhr.responseJSON.message || "An error occurred.");
+            },
         });
+    });
+});
+
+
       </script>
 </body>
 </html>
