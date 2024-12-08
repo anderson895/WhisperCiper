@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whisper Cipher - Signup</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+<body class="bg-gray-200 min-h-screen flex items-center justify-center">
+  <div class="flex flex-col md:flex-row w-11/12 max-w-4xl shadow-lg rounded-lg overflow-hidden">
+    <!-- Left Section -->
+    <div class="w-full md:w-1/2 bg-white flex flex-col justify-center items-center px-8 py-6">
+      <div class="mb-8 text-center">
+        <h1 class="text-3xl font-bold text-gray-800">Whisper Cipher</h1>
+        <p class="text-sm text-gray-500">Tell us your secret...</p>
+      </div>
+      <form id="registration-form" class="w-full max-w-sm">
+        <div class="mb-4">
+          <label for="username" class="block text-gray-700 font-medium">Username</label>
+          <input
+            type="text"
+            id="username"
+            class="w-full px-4 py-2 border rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+            placeholder="Enter your username"
+          />
+        </div>
+        <div class="mb-4">
+          <label for="password" class="block text-gray-700 font-medium">Password</label>
+          <input
+            type="password"
+            id="password"
+            class="w-full px-4 py-2 border rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+            placeholder="Enter your password"
+          />
+        </div>
+        <div class="mb-4">
+          <label for="verify-password" class="block text-gray-700 font-medium">Verify Password</label>
+          <input
+            type="password"
+            id="verify-password"
+            class="w-full px-4 py-2 border rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+            placeholder="Re-enter your password"
+          />
+        </div>
+        <div class="mb-6 flex items-center">
+          <input
+            type="checkbox"
+            id="confirm"
+            class="mr-2 focus:ring-purple-500"
+          />
+          <label for="confirm" class="text-sm text-gray-700">
+            I certify that the information is correct.
+          </label>
+        </div>
+        <button
+          type="submit"
+          class="w-full py-2 bg-purple-500 text-white rounded-full font-medium hover:bg-purple-600 transition"
+        >
+          Sign up
+        </button>
+        <div class="mt-4 text-center">
+          <a href="/" class="text-sm text-purple-500 hover:underline">Already have an account?</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Right Section -->
+    <div class="w-full md:w-1/2 bg-purple-600 flex justify-center items-center relative">
+      <div class="absolute inset-0 bg-purple-500 bg-opacity-80"></div>
+      <div
+        class="relative z-10 w-40 h-40 md:w-64 md:h-64 bg-purple-200 rounded-full flex items-center justify-center"
+      >
+        <div class="w-20 h-20 md:w-32 md:h-32 bg-purple-600 rounded-full"></div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script>
+    $(document).ready(function () {
+      $("#registration-form").submit(function (e) {
+        e.preventDefault();
+        const data = $(this).serialize();
+        $.ajax({
+          type: "POST",
+          url: "/registration",
+          data: data,
+          success: function (response) {
+            $("#registration-message").html(`<div class="text-green-700">${response.message}</div>`);
+            $("#registration-form")[0].reset();
+          },
+          error: function (xhr) {
+            $("#registration-message").html(`<div class="text-red-700">${xhr.responseJSON.message}</div>`);
+          },
+        });
+      });
+    });
+  </script>
+</body>
+</html>
