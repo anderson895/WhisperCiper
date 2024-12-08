@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Whisper Cipher</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/encrypted-3-64.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="bg-gradient-to-r from-purple-400 via-pink-300 to-indigo-500 min-h-screen flex justify-center items-center">
     {% include 'PageSpinner.html' %}
+
     <div class="bg-white p-8 rounded-xl shadow-xl w-full max-w-2xl">
         <div class="flex items-center justify-between mb-6">
             <div class="text-4xl font-bold text-gray-800">Whisper Cipher</div>

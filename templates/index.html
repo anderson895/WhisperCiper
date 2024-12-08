@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Whisper Cipher</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/encrypted-3-64.png') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
@@ -11,11 +12,12 @@
 </head>
 <body class="bg-gray-200 min-h-screen flex items-center justify-center">
     {% include 'PageSpinner.html' %}
+
     <div class="flex flex-col md:flex-row w-11/12 max-w-4xl shadow-lg rounded-lg overflow-hidden">
         <!-- Left Section -->
         <div class="w-full md:w-1/2 bg-white p-8">
             <div class="flex items-center mb-6">
-              
+                <img src="/static/images/encrypted-3-64.png" alt="Logo" class="w-10 h-10 mr-3">
                 <h1 class="text-2xl font-bold text-gray-800">Whisper Cipher</h1>
             </div>
             <p class="text-gray-500 mb-6">Tell us your secret...</p>
