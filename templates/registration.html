@@ -10,6 +10,9 @@
   <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 </head>
 <body class="bg-gray-200 min-h-screen flex items-center justify-center">
+
+    {% include 'PageSpinner.html' %}
+
   <div class="flex flex-col md:flex-row w-11/12 max-w-4xl shadow-lg rounded-lg overflow-hidden">
     <!-- Left Section -->
     <div class="w-full md:w-1/2 bg-white flex flex-col justify-center items-center px-8 py-6">
@@ -109,7 +112,7 @@
             success: function (response) {
                 alertify.success(response.message);
                 setTimeout(function () {
-                    window.location.href = '/login'; // Redirect to login page after 1 second
+                    window.location.href = '/'; // Redirect to login page after 1 second
                 }, 1000); // 1-second delay
             },
             error: function (xhr) {

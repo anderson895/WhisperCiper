@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whisper Cipher</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="bg-gradient-to-r from-purple-400 via-pink-300 to-indigo-500 min-h-screen flex justify-center items-center">
+    {% include 'PageSpinner.html' %}
+    <div class="bg-white p-8 rounded-xl shadow-xl w-full max-w-2xl">
+        <div class="flex items-center justify-between mb-6">
+            <div class="text-4xl font-bold text-gray-800">Whisper Cipher</div>
+           
+        </div>
+
+        <!-- Logout Button -->
+        <div class="absolute top-4 right-4">
+            <a href="/logout" class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400">Logout</a>
+        </div>
+
+        <form id="cipher-form">
+            <!-- Input field for text -->
+            <div class="mb-6">
+                <label for="text" class="block text-gray-700 font-semibold mb-2">Enter a text for Encryption & Decryption</label>
+                <textarea id="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400" rows="4" placeholder="Enter your text here..."></textarea>
+            </div>
+
+            <!-- Input field for secret key -->
+            <div class="mb-6">
+                <label for="key" class="block text-gray-700 font-semibold mb-2">Enter the secret key to encrypt and decrypt</label>
+                <input type="text" id="key" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400" placeholder="Enter your secret key...">
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex justify-between gap-4">
+                <button type="button" id="encrypt-btn" class="w-1/3 bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-400">Encrypt</button>
+                <button type="button" id="decrypt-btn" class="w-1/3 bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-400">Decrypt</button>
+                <button type="reset" class="w-1/3 bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400">Reset</button>
+            </div>
+        </form>
+
+        <!-- Result Display -->
+        <div class="mt-6">
+            <p id="result" class="font-semibold text-lg text-gray-700"></p>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Encrypt button click event
+            $('#encrypt-btn').click(function() {
+                const text = $('#text').val();
+                const key = $('#key').val();
+                
+                if (text && key) {
+                    $.ajax({
+                        url: '/encrypt',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ text: text, key: key }),
+                        success: function(response) {
+                            $('#result').text('Encrypted Text: ' + response.encrypted_text);
+                        },
+                        error: function(error) {
+                            if (error.responseJSON && error.responseJSON.error) {
+                                $('#result').text('Error: ' + error.responseJSON.error);
+                            } else {
+                                $('#result').text('An unknown error occurred.');
+                            }
+                        }
+                    });
+                } else {
+                    $('#result').text('Please provide both text and key.');
+                }
+            });
+
+            // Decrypt button click event
+            $('#decrypt-btn').click(function() {
+                const encryptedText = $('#text').val();
+                const key = $('#key').val();
+                
+                if (encryptedText && key) {
+                    $.ajax({
+                        url: '/decrypt',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ encrypted_text: encryptedText, key: key }),
+                        success: function(response) {
+                            $('#result').text('Decrypted Text: ' + response.decrypted_text);
+                        },
+                        error: function(error) {
+                            if (error.responseJSON && error.responseJSON.error) {
+                                $('#result').text('Error: ' + error.responseJSON.error);
+                            } else {
+                                $('#result').text('An unknown error occurred.');
+                            }
+                        }
+                    });
+                } else {
+                    $('#result').text('Please provide both encrypted text and key.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
